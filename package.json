@@ -1,0 +1,98 @@
+{
+  "name": "paste-perfect",
+  "version": "0.1.0",
+  "description": "The smartest paste cleaner for every rich text editor in 2025",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js",
+      "require": "./dist/react.cjs",
+      "default": "./dist/react.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:manual": "node test-manual.js",
+    "test:serve": "python -m http.server 8000 || npx serve .",
+    "lint": "eslint src --ext .ts,.tsx",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm run test"
+  },
+  "keywords": [
+    "paste",
+    "clean",
+    "rich-text",
+    "editor",
+    "clipboard",
+    "notion",
+    "google-docs",
+    "word",
+    "confluence",
+    "figma",
+    "ai",
+    "gemini"
+  ],
+  "author": "",
+  "license": "MIT",
+  "sideEffects": false,
+  "peerDependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@google/generative-ai": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.9",
+    "@testing-library/react": "^16.0.0",
+    "@types/node": "^20.14.12",
+    "@types/react": "^18.3.3",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "@vitest/coverage-v8": "^1.6.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "jsdom": "^24.0.0",
+    "prettier": "^3.3.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsup": "^8.0.1",
+    "typescript": "^5.5.3",
+    "vitest": "^1.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/paste-perfect.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/paste-perfect/issues"
+  },
+  "homepage": "https://github.com/YOUR_USERNAME/paste-perfect#readme"
+}
+

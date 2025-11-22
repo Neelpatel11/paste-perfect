@@ -1,0 +1,15 @@
+src/
+examples/
+*.config.*
+*.test.*
+*.spec.*
+node_modules/
+.DS_Store
+*.log
+.vscode/
+.idea/
+coverage/
+.changeset/
+.git/
+.gitignore
+

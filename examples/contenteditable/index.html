@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paste Perfect - ContentEditable Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      padding: 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    
+    h1 {
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 2rem;
+    }
+    
+    .editor {
+      min-height: 300px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 16px;
+      line-height: 1.6;
+      outline: none;
+    }
+    
+    .editor:focus {
+      border-color: #667eea;
+    }
+    
+    .editor p {
+      margin-bottom: 0.5rem;
+    }
+    
+    .info {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f5f5f5;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .before-after {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .before, .after {
+      padding: 1rem;
+      background: #f9f9f9;
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: monospace;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    
+    .before h3, .after h3 {
+      margin-bottom: 0.5rem;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>✨ Paste Perfect</h1>
+    <p class="subtitle">The smartest paste cleaner for every rich text editor</p>
+    
+    <div class="editor" contenteditable="true" id="editor" placeholder="Paste content here...">
+      <p>Try pasting content from Notion, Google Docs, Word, or any other rich text editor!</p>
+    </div>
+    
+    <div class="info">
+      <strong>💡 Tip:</strong> Paste content from Notion, Google Docs, Word, Apple Pages, Confluence, or Figma to see the magic happen!
+    </div>
+    
+    <div class="before-after">
+      <div class="before">
+        <h3>📋 Before (Raw HTML)</h3>
+        <pre id="before"></pre>
+      </div>
+      <div class="after">
+        <h3>✨ After (Cleaned)</h3>
+        <pre id="after"></pre>
+      </div>
+    </div>
+  </div>
+  
+  <script type="module">
+    import { cleanPaste } from '../../dist/index.js';
+    
+    const editor = document.getElementById('editor');
+    const beforeEl = document.getElementById('before');
+    const afterEl = document.getElementById('after');
+    
+    editor.addEventListener('paste', async (e) => {
+      e.preventDefault();
+      
+      const clipboardData = e.clipboardData;
+      if (!clipboardData) return;
+      
+      const rawHtml = clipboardData.getData('text/html');
+      const rawText = clipboardData.getData('text/plain');
+      
+      if (rawHtml) {
+        beforeEl.textContent = rawHtml.substring(0, 500) + (rawHtml.length > 500 ? '...' : '');
+        
+        try {
+          const cleaned = await cleanPaste(e, { format: 'html' });
+          afterEl.textContent = cleaned.substring(0, 500) + (cleaned.length > 500 ? '...' : '');
+          
+          // Insert cleaned HTML
+          const selection = window.getSelection();
+          if (selection && selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            range.deleteContents();
+            
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = cleaned;
+            const fragment = document.createDocumentFragment();
+            while (tempDiv.firstChild) {
+              fragment.appendChild(tempDiv.firstChild);
+            }
+            
+            range.insertNode(fragment);
+            range.setStartAfter(fragment.lastChild || fragment);
+            range.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
+        } catch (error) {
+          console.error('Paste cleaning failed:', error);
+          afterEl.textContent = 'Error: ' + error.message;
+        }
+      } else if (rawText) {
+        // Plain text fallback
+        beforeEl.textContent = rawText.substring(0, 500);
+        afterEl.textContent = rawText.substring(0, 500);
+        
+        const selection = window.getSelection();
+        if (selection && selection.rangeCount > 0) {
+          const range = selection.getRangeAt(0);
+          range.deleteContents();
+          range.insertNode(document.createTextNode(rawText));
+          range.setStartAfter(range.endContainer);
+          range.collapse(true);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+
