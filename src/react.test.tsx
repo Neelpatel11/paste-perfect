@@ -38,17 +38,30 @@ describe('usePasteCleaner', () => {
     
     renderHook(() => usePasteCleaner(ref, { onPaste }));
     
-    const mockEvent = {
-      clipboardData: {
-        getData: vi.fn((type: string) => {
-          if (type === 'text/html') return '<div class="notion-block">Test</div>';
-          return '';
-        }),
-      },
-      target: element,
-      preventDefault: vi.fn(),
-      stopPropagation: vi.fn(),
-    } as unknown as ClipboardEvent;
+    // Create a proper ClipboardEvent-like object that works with jsdom
+    const clipboardData = {
+      getData: vi.fn((type: string) => {
+        if (type === 'text/html') return '<div class="notion-block">Test</div>';
+        return '';
+      }),
+    };
+    
+    // Create event using jsdom's Event constructor
+    const mockEvent = new Event('paste', {
+      bubbles: true,
+      cancelable: true,
+    }) as ClipboardEvent;
+    
+    // Add clipboardData and target
+    Object.defineProperty(mockEvent, 'clipboardData', {
+      value: clipboardData,
+      writable: false,
+    });
+    
+    Object.defineProperty(mockEvent, 'target', {
+      value: element,
+      writable: false,
+    });
     
     await act(async () => {
       element.dispatchEvent(mockEvent);

@@ -17,6 +17,35 @@ describe('applyRuleBasedCleaners', () => {
     expect(cleaned).toContain('Test');
   });
 
+  it('should remove Google Docs <b> wrapper tags', () => {
+    const dirty = '<b style="font-weight:normal;" id="docs-internal-123"><h1>Test</h1></b>';
+    const cleaned = applyRuleBasedCleaners(dirty);
+    expect(cleaned).not.toContain('<b');
+    expect(cleaned).not.toContain('</b>');
+    expect(cleaned).not.toContain('docs-internal');
+    expect(cleaned).toContain('<h1>Test</h1>');
+  });
+
+  it('should remove Google Docs specific styles', () => {
+    const dirty = '<b id="docs-internal-123"><span style="font-variant:normal;vertical-align:baseline;white-space:pre;color:#000000;">Test</span></b>';
+    const cleaned = applyRuleBasedCleaners(dirty);
+    expect(cleaned).not.toContain('font-variant');
+    expect(cleaned).not.toContain('vertical-align');
+    expect(cleaned).not.toContain('white-space');
+    expect(cleaned).not.toContain('<b'); // Should remove <b> wrapper
+    expect(cleaned).toContain('color:#000000'); // Should keep color
+    expect(cleaned).toContain('Test');
+  });
+
+  it('should remove Google Docs comments and meta tags', () => {
+    const dirty = '<!--StartFragment--><meta charset="utf-8"><p>Test</p><!--EndFragment-->';
+    const cleaned = applyRuleBasedCleaners(dirty);
+    expect(cleaned).not.toContain('StartFragment');
+    expect(cleaned).not.toContain('EndFragment');
+    expect(cleaned).not.toContain('<meta');
+    expect(cleaned).toContain('<p>Test</p>');
+  });
+
   it('should clean Microsoft Word HTML', () => {
     const dirty = '<p><o:p>&nbsp;</o:p>Content</p>';
     const cleaned = applyRuleBasedCleaners(dirty);

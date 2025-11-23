@@ -50,13 +50,16 @@ describe('cleanPaste', () => {
 
   describe('with ClipboardEvent', () => {
     it('should extract HTML from clipboard', async () => {
+      const clipboardData = {
+        getData: vi.fn((type: string) => {
+          if (type === 'text/html') return '<p>Pasted content</p>';
+          return '';
+        }),
+      };
+      
+      // Create mock event that works in Node.js environment
       const mockEvent = {
-        clipboardData: {
-          getData: vi.fn((type: string) => {
-            if (type === 'text/html') return '<p>Pasted content</p>';
-            return '';
-          }),
-        },
+        clipboardData,
         preventDefault: vi.fn(),
         stopPropagation: vi.fn(),
       } as unknown as ClipboardEvent;
@@ -66,13 +69,16 @@ describe('cleanPaste', () => {
     });
 
     it('should fallback to plain text if no HTML', async () => {
+      const clipboardData = {
+        getData: vi.fn((type: string) => {
+          if (type === 'text/plain') return 'Plain text';
+          return '';
+        }),
+      };
+      
+      // Create mock event that works in Node.js environment
       const mockEvent = {
-        clipboardData: {
-          getData: vi.fn((type: string) => {
-            if (type === 'text/plain') return 'Plain text';
-            return '';
-          }),
-        },
+        clipboardData,
         preventDefault: vi.fn(),
         stopPropagation: vi.fn(),
       } as unknown as ClipboardEvent;

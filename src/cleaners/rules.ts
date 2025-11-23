@@ -73,22 +73,102 @@ export const ruleBasedCleaners: RuleBasedCleaner[] = [
       /id="docs-internal-[^"]*"/gi,
       /<b[^>]*id="[^"]*"[^>]*>/gi,
       /<span[^>]*style="[^"]*font-family:[^"]*Google Sans[^"]*"/gi,
+      /<meta[^>]*charset="utf-8"[^>]*>/gi,
+      /<!--StartFragment-->/gi,
+      /<!--EndFragment-->/gi,
     ],
     clean: (html: string) => {
       let cleaned = html;
-      // Remove Google Docs internal IDs
+      
+      // Remove Google Docs comments
+      cleaned = cleaned.replace(/<!--StartFragment-->/gi, '');
+      cleaned = cleaned.replace(/<!--EndFragment-->/gi, '');
+      
+      // Remove meta tags that Google Docs adds
+      cleaned = cleaned.replace(/<meta[^>]*charset="utf-8"[^>]*>/gi, '');
+      
+      // Remove Google Docs internal IDs from all elements
       cleaned = cleaned.replace(/id="docs-internal-[^"]*"/gi, '');
-      // Clean up Google Sans font references
-      cleaned = cleaned.replace(/font-family:[^;]*Google Sans[^;]*;?/gi, '');
+      cleaned = cleaned.replace(/\s+id="[^"]*"/gi, ''); // Remove any remaining IDs
+      
+      // Remove Google Docs specific attributes
+      cleaned = cleaned.replace(/\s+dir="ltr"/gi, '');
+      cleaned = cleaned.replace(/\s+dir="rtl"/gi, '');
+      
+      // Remove redundant <b> tags with font-weight:normal (Google Docs wrapper)
+      cleaned = cleaned.replace(/<b[^>]*style="[^"]*font-weight:\s*normal[^"]*"[^>]*>/gi, '');
+      cleaned = cleaned.replace(/<b[^>]*>\s*/gi, ''); // Remove opening <b> tags
+      cleaned = cleaned.replace(/\s*<\/b>/gi, ''); // Remove closing </b> tags
+      
+      // Clean up style attributes - remove Google Docs specific styles
+      cleaned = cleaned.replace(/style="([^"]*)"/gi, (_match, styles) => {
+        if (!styles) return '';
+        
+        // Split and filter styles
+        const styleParts = styles.split(';').filter((part: string) => {
+          const trimmed = part.trim().toLowerCase();
+          if (!trimmed) return false;
+          
+          // Remove Google Docs specific styles
+          const removePatterns = [
+            'font-variant:',
+            'vertical-align:',
+            'white-space:pre',
+            'white-space:pre-wrap',
+            'background-color:transparent',
+            'font-family:arial,sans-serif', // Common default, can be removed
+            'font-family:arial',
+          ];
+          
+          if (removePatterns.some(pattern => trimmed.includes(pattern))) {
+            return false;
+          }
+          
+          // Keep only essential styles
+          const keepStyles = [
+            'color:',
+            'background-color:', // But not transparent
+            'font-weight:',
+            'font-style:',
+            'text-decoration:',
+            'font-size:',
+            'text-align:',
+          ];
+          
+          // Keep if it's a useful style and not transparent background
+          if (keepStyles.some(keep => trimmed.startsWith(keep))) {
+            // Don't keep transparent backgrounds
+            if (trimmed.startsWith('background-color:') && trimmed.includes('transparent')) {
+              return false;
+            }
+            return true;
+          }
+          
+          return false;
+        });
+        
+        if (styleParts.length > 0) {
+          return `style="${styleParts.join(';')}"`;
+        }
+        return '';
+      });
+      
       // Remove empty style attributes
+      cleaned = cleaned.replace(/\s+style="\s*"/gi, '');
       cleaned = cleaned.replace(/style="\s*"/gi, '');
+      
+      // Remove empty attributes
+      cleaned = cleaned.replace(/\s+id="\s*"/gi, '');
+      cleaned = cleaned.replace(/\s+dir="\s*"/gi, '');
+      
       return cleaned;
     },
   },
   {
     name: 'microsoft-word',
     patterns: [
-      /<o:p>\s*<\/o:p>/gi,
+      /<o:p>/gi,
+      /<\/o:p>/gi,
       /xmlns:o="[^"]*"/gi,
       /<w:[^>]*>/gi,
       /<!--\[if[^\]]*\]>/gi,
@@ -96,8 +176,10 @@ export const ruleBasedCleaners: RuleBasedCleaner[] = [
     ],
     clean: (html: string) => {
       let cleaned = html;
-      // Remove Office XML tags
-      cleaned = cleaned.replace(/<o:p>\s*<\/o:p>/gi, '');
+      // Remove Office XML tags (both opening and closing)
+      cleaned = cleaned.replace(/<o:p>.*?<\/o:p>/gi, '');
+      cleaned = cleaned.replace(/<o:p[^>]*>/gi, '');
+      cleaned = cleaned.replace(/<\/o:p>/gi, '');
       cleaned = cleaned.replace(/xmlns:o="[^"]*"/gi, '');
       cleaned = cleaned.replace(/<w:[^>]*>/gi, '');
       // Remove Word conditional comments
@@ -246,8 +328,14 @@ export function applyRuleBasedCleaners(html: string): string {
     }
   }
   
-  // Final normalization (preserve whitespace in content)
+  // Final normalization
+  // Remove whitespace between tags
   cleaned = cleaned.replace(/>\s+</g, '><');
+  // Normalize whitespace inside text content (but preserve single spaces)
+  cleaned = cleaned.replace(/>([^<]+)</g, (match, content) => {
+    const normalized = content.replace(/\s+/g, ' ').trim();
+    return normalized ? `>${normalized}<` : match;
+  });
   cleaned = cleaned.trim();
   
   return cleaned;

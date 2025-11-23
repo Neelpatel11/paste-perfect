@@ -112,8 +112,18 @@ export async function cleanPaste(
   
   if (typeof input === 'string') {
     html = input;
-  } else if (input instanceof ClipboardEvent) {
+  } else if (
+    typeof ClipboardEvent !== 'undefined' && 
+    input instanceof ClipboardEvent
+  ) {
     html = extractHTMLFromClipboard(input);
+  } else if (
+    input && 
+    typeof input === 'object' && 
+    'clipboardData' in input
+  ) {
+    // Fallback for test environments where ClipboardEvent might not be available
+    html = extractHTMLFromClipboard(input as ClipboardEvent);
   } else {
     throw new Error('Input must be a string or ClipboardEvent');
   }

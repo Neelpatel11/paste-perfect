@@ -1,6 +1,6 @@
 {
   "name": "paste-perfect",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "The smartest paste cleaner for every rich text editor in 2025",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -53,7 +53,7 @@
     "ai",
     "gemini"
   ],
-  "author": "",
+  "author": "Neel Patel",
   "license": "MIT",
   "sideEffects": false,
   "peerDependencies": {
@@ -88,11 +88,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/YOUR_USERNAME/paste-perfect.git"
+    "url": "https://github.com/Neelpatel11/paste-perfect.git"
   },
   "bugs": {
-    "url": "https://github.com/YOUR_USERNAME/paste-perfect/issues"
+    "url": "https://github.com/Neelpatel11/paste-perfect/issues"
   },
-  "homepage": "https://github.com/YOUR_USERNAME/paste-perfect#readme"
+  "homepage": "https://github.com/Neelpatel11/paste-perfect#readme"
 }
 

@@ -7,10 +7,14 @@ node_modules/
 dist/
 build/
 *.tsbuildinfo
+.tsbuildinfo
 
 # Testing
 coverage/
 .nyc_output/
+*.lcov
+.jest/
+.vitest/
 
 # Logs
 *.log
@@ -23,31 +27,92 @@ pnpm-debug.log*
 # Environment variables
 .env
 .env.local
+.env.development
 .env.development.local
+.env.test
 .env.test.local
+.env.production
 .env.production.local
 
-# IDE
-.vscode/
+# IDE and editors
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.vscode-test
 .idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-project
+*.sublime-workspace
 *.swp
 *.swo
 *~
+.history/
+*.vsix
 
-# OS
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 Thumbs.db
+ehthumbs.db
 desktop.ini
+Desktop.ini
 
 # Temporary files
 *.tmp
 *.temp
 .cache/
+.turbo/
+tmp/
+temp/
 
-# Package manager locks (optional - uncomment if you want to ignore)
+# Package manager
+.npm
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.yarn-integrity
+.pnp.*
+
+# Package manager lock files (optional - uncomment if you want to ignore)
 # package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
+
+# Build tool caches
+.eslintcache
+.prettiercache
+.stylelintcache
+.parcel-cache
+.rollup.cache/
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+.fusebox/
+.tern-port
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+.node_repl_history
+
+# Deployment
+.vercel
+.netlify
+.serverless/
+.dynamodb/
 
 # Changeset
 .changeset/*.md
@@ -57,8 +122,26 @@ GITHUB-SETUP.md
 PRE-PUSH-CHECKLIST.md
 INITIAL-COMMIT.md
 AI-MODE-GUIDE.md
+NPM-PUBLISH-GUIDE.md
+NPM-GITHUB-RELATIONSHIP.md
+
+# Publish guides (temporary)
+PUBLISH-*.md
 
 # Manual test files (for local development only)
 test-manual.html
 test-manual.js
 
+# NPM pack files (created during testing)
+*.tgz
+paste-perfect-*.tgz
+
+# Final test folder
+finaltest/
+
+# Framework specific
+.next/
+out/
+.nuxt/
+.vite/
+storybook-static/
