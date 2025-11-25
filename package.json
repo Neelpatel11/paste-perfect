@@ -1,6 +1,6 @@
 {
   "name": "paste-perfect",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "The smartest paste cleaner for every rich text editor in 2025",
   "type": "module",
   "main": "./dist/index.cjs",
