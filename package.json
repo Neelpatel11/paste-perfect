@@ -24,7 +24,8 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "pasteperfectdemo.mp4"
   ],
   "scripts": {
     "build": "tsup",

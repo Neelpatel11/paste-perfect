@@ -6,15 +6,18 @@
 
 [![npm version](https://img.shields.io/npm/v/paste-perfect.svg?style=for-the-badge)](https://www.npmjs.com/package/paste-perfect)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/paste-perfect?style=for-the-badge&label=size)](https://bundlephobia.com/package/paste-perfect)
-[![license](https://img.shields.io/npm/l/paste-perfect.svg?style=for-the-badge)](https://github.com/yourusername/paste-perfect/blob/main/LICENSE)
+[![license](https://img.shields.io/npm/l/paste-perfect.svg?style=for-the-badge)](https://github.com/neelpatel11/paste-perfect/blob/main/LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![test coverage](https://img.shields.io/badge/coverage-95%25+-green?style=for-the-badge)](https://github.com/yourusername/paste-perfect)
+[![test coverage](https://img.shields.io/badge/coverage-95%25+-green?style=for-the-badge)](https://github.com/neelpatel11/paste-perfect)
 
 > **One line of code.** Clean paste from Notion, Google Docs, Word, Confluence, Figma, and more. With optional AI-powered cleaning using Gemini 1.5 Flash.
 
 <br/>
 
-![Demo GIF Placeholder - 15 seconds showing paste cleaning in action](https://via.placeholder.com/800x400/667eea/ffffff?text=Paste+Perfect+Demo+GIF+%2815s%29)
+<video autoplay loop muted playsinline style="width: 100%; max-width: 800px; border-radius: 8px;">
+  <source src="pasteperfectdemo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 <div align="left">
 
@@ -477,9 +480,9 @@ Licensed under [MIT](./LICENSE)
 
 **⭐ If you find this useful, please star it on GitHub!**
 
-[GitHub](https://github.com/yourusername/paste-perfect) · 
-[Issues](https://github.com/yourusername/paste-perfect/issues) · 
-[Discussions](https://github.com/yourusername/paste-perfect/discussions)
+[GitHub](https://github.com/neelpatel11/paste-perfect) · 
+[Issues](https://github.com/neelpatel11/paste-perfect/issues) · 
+[Discussions](https://github.com/neelpatel11/paste-perfect/discussions)
 
 Made with ✨ by the Paste Perfect team
 
