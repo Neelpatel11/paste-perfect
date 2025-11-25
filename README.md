@@ -14,7 +14,7 @@
 
 <br/>
 
-![Paste Perfect Demo](pasteperfectdemogif.gif)
+![Paste Perfect Demo](paste-perfectdemo.gif)
 
 <div align="left">
 
