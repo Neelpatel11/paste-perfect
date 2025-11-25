@@ -15,7 +15,7 @@
 <br/>
 
 <video autoplay loop muted playsinline style="width: 100%; max-width: 800px; border-radius: 8px;">
-  <source src="pasteperfectdemo.mp4" type="video/mp4">
+  <source src="https://raw.githubusercontent.com/neelpatel11/paste-perfect/master/pasteperfectdemo.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
